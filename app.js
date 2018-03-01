@@ -7,6 +7,7 @@ const app = express();
 
 // Router imports
 const homeRouter = require('./routes/home/main');
+const adminRouter = require('./routes/admin/main');
 
 app.use(express.static(path.join(__dirname,'public')));
 
@@ -16,6 +17,7 @@ app.set('view engine','handlebars');
 
 // Route Middlewares
 app.use('/',homeRouter);
+app.use('/admin',adminRouter);
 
 
 // Server port setup
