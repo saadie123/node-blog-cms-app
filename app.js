@@ -9,6 +9,8 @@ const app = express();
 mongoose.connect('mongodb://localhost/blog-cms');
 mongoose.Promise = global.Promise;
 
+const {select} = require('./helpers/hbs-helpers');
+
 // Router imports
 const homeRouter = require('./routes/home/main');
 const adminRouter = require('./routes/admin/main');
@@ -18,8 +20,9 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+
 // View Engine Setup
-app.engine('handlebars',expresshbs({defaultLayout:'home'}));
+app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select:select}}));
 app.set('view engine','handlebars');
 
 // Route Middlewares
