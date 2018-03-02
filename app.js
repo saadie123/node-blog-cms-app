@@ -2,8 +2,11 @@
 const path = require('path');
 const express = require('express');
 const expresshbs = require('express-handlebars');
+const mongoose = require('mongoose');
 
 const app = express();
+mongoose.connect('mongodb://localhost/blog-cms');
+mongoose.Promise = global.Promise;
 
 // Router imports
 const homeRouter = require('./routes/home/main');

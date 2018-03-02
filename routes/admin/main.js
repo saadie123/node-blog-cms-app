@@ -6,14 +6,11 @@ router.all('/*',(req,res,next)=>{
     next();
 });
 
-
+// Admin dashboard route
 router.get('/',(req,res)=>{
     res.render('admin/index');
 });
 
-// Admin dashboard route
-router.get('/dashboard',(req,res)=>{
-    res.render('admin/dashboard');
-})
+
 
 module.exports = router;
