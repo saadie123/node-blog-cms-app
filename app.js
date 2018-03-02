@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const expresshbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express();
 mongoose.connect('mongodb://localhost/blog-cms');
@@ -14,6 +15,7 @@ const adminRouter = require('./routes/admin/main');
 const postsRouter = require('./routes/admin/posts');
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(bodyParser.json());
 
 // View Engine Setup
 app.engine('handlebars',expresshbs({defaultLayout:'home'}));
