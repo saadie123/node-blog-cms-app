@@ -1,7 +1,9 @@
 const express = require('express');
+const fs = require('fs');
 const router = express.Router();
 
 const Post = require('../../models/Post');
+const {isEmpty,uploadDir} = require('../../helpers/upload-helper');
 
 router.all('/*',(req,res,next)=>{
     req.app.locals.layout = "admin";
@@ -13,7 +15,7 @@ router.get('/',async (req,res)=>{
         let posts = await Post.find();
         res.render('admin/posts/index',{posts});
     } catch(error){
-        console.log(error);        
+        console.log(error);
     }
 });
 
@@ -32,15 +34,27 @@ router.get('/edit/:id',async (req,res)=>{
 
 router.post('/create',async (req,res)=>{
     try{
-        let allowComments = req.body.allowComments === 'on' ? true : false;
-        let post = new Post({
-            title: req.body.title,
-            status: req.body.status,
-            description: req.body.description,
-            allowComments
-        });
-        let newPost = await post.save();
-        res.redirect('/admin/posts');
+        if(!isEmpty(req.files)){
+            let file = req.files.postImage;
+            fileName = Date.now() + '-' + file.name;
+            file.mv(`./public/uploads/${fileName}`, (error)=>{
+                if(error){
+                    console.log(error);
+                }
+            });
+            let allowComments = req.body.allowComments === 'on' ? true : false;
+            let post = new Post({
+                title: req.body.title,
+                postImage: fileName,
+                status: req.body.status,
+                description: req.body.description,
+                allowComments
+            });
+            let newPost = await post.save();
+            res.redirect('/admin/posts');
+        } else {
+            res.redirect('/admin/posts');            
+        }
     } catch(error){
         console.log(error);
     }
@@ -63,9 +77,12 @@ router.put('/edit/:id',async (req,res)=>{
 router.delete('/:id',async (req,res)=>{    
     try {
         let post = await Post.findByIdAndRemove(req.params.id);
+        fs.unlink(uploadDir + post.postImage,(error)=>{
+            console.log(error);
+        });
         res.redirect('/admin/posts');
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 });
 

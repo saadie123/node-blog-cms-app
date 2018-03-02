@@ -5,6 +5,7 @@ const expresshbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const expressFileUpload = require('express-fileupload');
 
 const app = express();
 mongoose.connect('mongodb://localhost/blog-cms');
@@ -18,6 +19,7 @@ const adminRouter = require('./routes/admin/main');
 const postsRouter = require('./routes/admin/posts');
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(expressFileUpload());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));

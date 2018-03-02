@@ -2,21 +2,24 @@ const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
     title:{
-        type:String,
+        type: String,
         minlength: 5,
         required: true
     },
+    postImage:{
+        type: String
+    },
     status:{
-        type:String,
-        required:true,
+        type: String,
+        required: true,
         default: 'public'
     },
     description:{
-        type:String,
-        required:true
+        type: String,
+        required: true
     },
     allowComments:{
-        type:Boolean,
+        type: Boolean,
         required: true
     },
     user:{
