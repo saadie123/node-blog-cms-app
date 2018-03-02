@@ -9,12 +9,16 @@ router.all('/*',(req,res,next)=>{
 });
 
 router.get('/',(req,res)=>{
-    res.send("working");
-})
+    Post.find().then(posts=>{
+        res.render('admin/posts/index',{posts});
+    }).catch(error=>{
+        console.log(error);
+    })
+});
 
 router.get('/create',(req,res)=>{
     res.render('admin/posts/create');
-})
+});
 
 router.post('/create',(req,res)=>{
     let allowComments = req.body.allowComments === 'on' ? true : false;
@@ -23,13 +27,17 @@ router.post('/create',(req,res)=>{
         status: req.body.status,
         description: req.body.description,
         allowComments
-    })
+    });
    // console.log(allowComments);
-    post.save().then(post=>{
-        console.log(post)
+    post.save()
+    .then(post=>{
+        console.log(post);
     })
-    res.render('admin/posts/create');
-})
+    .catch(error=>{
+        console.log(error);
+    });
+    res.redirect('/admin/posts');
+});
 
 
 module.exports = router;
