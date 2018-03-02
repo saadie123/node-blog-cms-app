@@ -22,7 +22,7 @@ const PostSchema = new mongoose.Schema({
     user:{
          type: mongoose.SchemaTypes.ObjectId,
          ref: 'users',
-         required: true,
+    //     required: true,
     }
 });
 

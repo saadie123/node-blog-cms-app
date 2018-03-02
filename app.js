@@ -15,6 +15,7 @@ const adminRouter = require('./routes/admin/main');
 const postsRouter = require('./routes/admin/posts');
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 // View Engine Setup

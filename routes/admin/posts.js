@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Post = require('../../models/Post');
+
 router.all('/*',(req,res,next)=>{
     req.app.locals.layout = "admin";
     next();
@@ -15,7 +17,18 @@ router.get('/create',(req,res)=>{
 })
 
 router.post('/create',(req,res)=>{
-    res.send("it worked");
+    let allowComments = req.body.allowComments === 'on' ? true : false;
+    let post = new Post({
+        title: req.body.title,
+        status: req.body.status,
+        description: req.body.description,
+        allowComments
+    })
+   // console.log(allowComments);
+    post.save().then(post=>{
+        console.log(post)
+    })
+    res.render('admin/posts/create');
 })
 
 
