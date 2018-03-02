@@ -20,6 +20,12 @@ router.get('/create',(req,res)=>{
     res.render('admin/posts/create');
 });
 
+router.get('/edit/:id',(req,res)=>{
+    Post.findById(req.params.id).then(post=>{
+        res.render('admin/posts/edit',{post});
+    })
+})
+
 router.post('/create',(req,res)=>{
     let allowComments = req.body.allowComments === 'on' ? true : false;
     let post = new Post({
