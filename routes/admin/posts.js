@@ -34,7 +34,6 @@ router.post('/create',(req,res)=>{
         description: req.body.description,
         allowComments
     });
-   // console.log(allowComments);
     post.save()
     .then(post=>{
         console.log(post);
@@ -46,13 +45,27 @@ router.post('/create',(req,res)=>{
 });
 
 router.put('/edit/:id',(req,res)=>{
-    let allowComments = req.body.allowComments === 'on' ? true : false;    
+    let allowComments = req.body.allowComments === 'on' ? true : false;
     let body = {
         ...req.body,
         allowComments
     }
-    Post.findByIdAndUpdate(req.params.id,{$set:body}).then(post=>{
+    Post.findByIdAndUpdate(req.params.id,{$set:body})
+    .then(post=>{
         res.redirect('/admin/posts');
+    })
+    .catch(error=>{
+       console.log(error);
+    });
+});
+
+router.delete('/:id',(req,res)=>{
+    Post.findByIdAndRemove(req.params.id)
+    .then(post=>{
+        res.redirect('/admin/posts');
+    })
+    .catch(error=>{
+        console.log(error);
     });
 });
 
