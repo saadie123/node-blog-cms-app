@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8 col-xs-12">
             <h1>Edit Post</h1>
-            <form action="/admin/posts/edit" method="POST">
+            <form action="/admin/posts/edit/{{post._id}}?_method=PUT" method="POST">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input name="title" type="text" value="{{post.title}}" id="title" class="form-control" placeholder="Enter title">

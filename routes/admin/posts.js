@@ -45,5 +45,15 @@ router.post('/create',(req,res)=>{
     res.redirect('/admin/posts');
 });
 
+router.put('/edit/:id',(req,res)=>{
+    let allowComments = req.body.allowComments === 'on' ? true : false;    
+    let body = {
+        ...req.body,
+        allowComments
+    }
+    Post.findByIdAndUpdate(req.params.id,{$set:body}).then(post=>{
+        res.redirect('/admin/posts');
+    });
+});
 
 module.exports = router;
