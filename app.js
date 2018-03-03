@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const expressFileUpload = require('express-fileupload');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 const app = express();
 mongoose.connect('mongodb://localhost/blog-cms');
@@ -23,7 +25,17 @@ app.use(expressFileUpload());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
+app.use(flash());
+app.use(session({
+    secret: 'javascriptislove',
+    resave: true,
+    saveUninitialized: true
+}));
 
+app.use((req,res,next)=>{
+    res.locals.successMessage = req.flash('success_message');
+    next();
+});
 
 // View Engine Setup
 app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select:select}}));

@@ -68,6 +68,7 @@ router.post('/create',async (req,res)=>{
                 allowComments
             });
             let newPost = await post.save();
+            req.flash('success_message',`Post ${newPost.title} was created successfully`);
             res.redirect('/admin/posts');
         }
     } catch(error){
@@ -95,6 +96,7 @@ router.put('/edit/:id',async (req,res)=>{
         } 
         else{
             let post = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
+            req.flash('success_message',`Post ${post.title} was updated successfully`);            
             res.redirect('/admin/posts');   
         }
     } catch (error) {
@@ -108,6 +110,7 @@ router.delete('/:id',async (req,res)=>{
         fs.unlink(uploadDir + post.postImage,(error)=>{
             console.log(error);
         });
+        req.flash('success_message',`Post ${post.title} was deleted successfully`);        
         res.redirect('/admin/posts');
     } catch (error) {
         console.log(error);

@@ -1,5 +1,6 @@
 <div class="container">
     <h1>All Posts</h1>
+    {{> admin/form-messages}}
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -19,11 +20,17 @@
                 <td><img height="50" src="/uploads/{{postImage}}"></td>
                 <td>{{status}}</td>
                 <td>{{description}}</td>
-                <td>{{allowComments}}</td>
-                <td><a class="btn btn-info" href='/admin/posts/edit/{{_id}}'d>Edit</a></td>
+                <td>
+                    {{#if allowComments}}
+                        <i class="fa fa-check"></i>
+                        {{else}}
+                        <i class="fa fa-times"></i>
+                    {{/if}}
+                </td>
+                <td><a class="btn btn-info" href='/admin/posts/edit/{{_id}}'<d><i class="fa fa-pencil"></i></d></a></td>
                 <td>
                     <form action="/admin/posts/{{_id}}?_method=DELETE" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                     </form>
                 </td>
             </tr>
