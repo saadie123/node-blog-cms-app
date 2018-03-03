@@ -68,7 +68,7 @@ router.post('/create',async (req,res)=>{
                 allowComments
             });
             let newPost = await post.save();
-            req.flash('success_message',`Post ${newPost.title} was created successfully`);
+            req.flash('success_message',`Post ${newPost.title} was created successfully!`);
             res.redirect('/admin/posts');
         }
     } catch(error){
@@ -87,6 +87,9 @@ router.put('/edit/:id',async (req,res)=>{
         if(!req.body.title){
             errors.push({error:'Post title is required!'});
         }
+        if(isEmpty(req.files)){
+            errors.push({error:'Post image is required!'});
+        }
         if(!req.body.description){
             errors.push({error:'Post description cannot be empty!'});
         }
@@ -95,8 +98,16 @@ router.put('/edit/:id',async (req,res)=>{
             res.render('admin/posts/edit',{errors,post:body});
         } 
         else{
+            let file = req.files.postImage;
+            fileName = Date.now() + '-' + file.name;
+            file.mv(`./public/uploads/${fileName}`, (error)=>{
+                if(error){
+                    console.log(error);
+                }
+            });
+            body.postImage = fileName;
             let post = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
-            req.flash('success_message',`Post ${post.title} was updated successfully`);            
+            req.flash('success_message',`Post ${post.title} was updated successfully!`);            
             res.redirect('/admin/posts');   
         }
     } catch (error) {
@@ -110,7 +121,7 @@ router.delete('/:id',async (req,res)=>{
         fs.unlink(uploadDir + post.postImage,(error)=>{
             console.log(error);
         });
-        req.flash('success_message',`Post ${post.title} was deleted successfully`);        
+        req.flash('success_message',`Post ${post.title} was deleted successfully!`);        
         res.redirect('/admin/posts');
     } catch (error) {
         console.log(error);
