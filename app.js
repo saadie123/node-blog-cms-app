@@ -13,7 +13,7 @@ const app = express();
 mongoose.connect('mongodb://localhost/blog-cms');
 mongoose.Promise = global.Promise;
 
-const {select} = require('./helpers/hbs-helpers');
+const {select,dateFormat} = require('./helpers/hbs-helpers');
 
 // Router imports
 const homeRouter = require('./routes/home/main');
@@ -38,7 +38,7 @@ app.use((req,res,next)=>{
 });
 
 // View Engine Setup
-app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select:select}}));
+app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select,dateFormat}}));
 app.set('view engine','handlebars');
 
 // Route Middlewares

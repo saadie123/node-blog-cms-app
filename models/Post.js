@@ -22,6 +22,10 @@ const PostSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    date: {
+        type: Date,
+        default: Date.now()
+    },
     user:{
          type: mongoose.SchemaTypes.ObjectId,
          ref: 'users',

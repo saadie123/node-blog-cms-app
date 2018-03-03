@@ -8,7 +8,8 @@
                 <th>Image</th>
                 <th>Status</th>
                 <th>Description</th>
-                <th>Allow Comments</th>
+                <th>Comments</th>
+                <th>Post Date</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -22,11 +23,12 @@
                 <td>{{description}}</td>
                 <td>
                     {{#if allowComments}}
-                        <i class="fa fa-check"></i>
+                        Allowed
                         {{else}}
-                        <i class="fa fa-times"></i>
+                        Not allowed
                     {{/if}}
                 </td>
+                <td>{{dateFormat date 'MMMM Do YYYY'}}</td>
                 <td><a class="btn btn-info" href='/admin/posts/edit/{{_id}}'<d><i class="fa fa-pencil"></i></d></a></td>
                 <td>
                     <form action="/admin/posts/{{_id}}?_method=DELETE" method="POST">

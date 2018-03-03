@@ -26,7 +26,6 @@ router.get('/create',(req,res)=>{
 router.get('/edit/:id',async (req,res)=>{
     try{
         let post = await Post.findById(req.params.id);
-        console.log(post);
         res.render('admin/posts/edit',{post});        
     } catch(error){
         console.log(error);
@@ -87,9 +86,6 @@ router.put('/edit/:id',async (req,res)=>{
         if(!req.body.title){
             errors.push({error:'Post title is required!'});
         }
-        if(isEmpty(req.files)){
-            errors.push({error:'Post image is required!'});
-        }
         if(!req.body.description){
             errors.push({error:'Post description cannot be empty!'});
         }
@@ -98,16 +94,22 @@ router.put('/edit/:id',async (req,res)=>{
             res.render('admin/posts/edit',{errors,post:body});
         } 
         else{
-            let file = req.files.postImage;
-            fileName = Date.now() + '-' + file.name;
-            file.mv(`./public/uploads/${fileName}`, (error)=>{
-                if(error){
+            if(!isEmpty(req.files)){
+                let post = await Post.findById(req.params.id);
+                fs.unlink(uploadDir + post.postImage,(error)=>{
                     console.log(error);
-                }
-            });
-            body.postImage = fileName;
-            let post = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
-            req.flash('success_message',`Post ${post.title} was updated successfully!`);            
+                });
+                let file = req.files.postImage;
+                fileName = Date.now() + '-' + file.name;
+                file.mv(`./public/uploads/${fileName}`, (error)=>{
+                    if(error){
+                        console.log(error);
+                    }
+                });
+                body.postImage = fileName;
+            }
+            let updatedPost = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
+            req.flash('success_message',`Post ${updatedPost.title} was updated successfully!`);            
             res.redirect('/admin/posts');   
         }
     } catch (error) {
