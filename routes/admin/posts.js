@@ -26,6 +26,7 @@ router.get('/create',(req,res)=>{
 router.get('/edit/:id',async (req,res)=>{
     try{
         let post = await Post.findById(req.params.id);
+        console.log(post);
         res.render('admin/posts/edit',{post});        
     } catch(error){
         console.log(error);
@@ -34,7 +35,23 @@ router.get('/edit/:id',async (req,res)=>{
 
 router.post('/create',async (req,res)=>{
     try{
-        if(!isEmpty(req.files)){
+        let errors = [];
+        if(!req.body.title){
+            errors.push({error:'Post title is required!'});
+        }
+        if(isEmpty(req.files)){
+            errors.push({error:'Post image is required!'});
+        }
+        if(!req.body.status){
+            errors.push({error:'Please select post status!'});
+        }
+        if(!req.body.description){
+            errors.push({error:'Post description cannot be empty!'});
+        }
+        if(errors.length > 0){
+            res.render('admin/posts/create',{errors,post:req.body});
+        } 
+        else{
             let file = req.files.postImage;
             fileName = Date.now() + '-' + file.name;
             file.mv(`./public/uploads/${fileName}`, (error)=>{
@@ -52,8 +69,6 @@ router.post('/create',async (req,res)=>{
             });
             let newPost = await post.save();
             res.redirect('/admin/posts');
-        } else {
-            res.redirect('/admin/posts');            
         }
     } catch(error){
         console.log(error);
@@ -67,8 +82,21 @@ router.put('/edit/:id',async (req,res)=>{
         allowComments
     }
     try {
-        let post = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
-        res.redirect('/admin/posts');   
+        let errors = [];
+        if(!req.body.title){
+            errors.push({error:'Post title is required!'});
+        }
+        if(!req.body.description){
+            errors.push({error:'Post description cannot be empty!'});
+        }
+        if(errors.length > 0){
+            body._id = req.params.id;
+            res.render('admin/posts/edit',{errors,post:body});
+        } 
+        else{
+            let post = await Post.findByIdAndUpdate(req.params.id,{$set:body},{new:true});
+            res.redirect('/admin/posts');   
+        }
     } catch (error) {
         console.log(error)
     }    
