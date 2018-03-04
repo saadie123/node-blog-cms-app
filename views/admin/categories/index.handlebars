@@ -1,11 +1,12 @@
 <h1 class="page-header">Categories</h1>
+    {{> admin/form-messages}}    
 <div class="row">
     <div class="col-sm-4 col-xs-12">
         {{> admin/error-message}}        
         <form action="/admin/categories/create" method="POST">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input name="name" type="text" class="form-control" placeholder="Enter category name">
+                <input name="name" id="name" type="text" class="form-control" placeholder="Enter category name">
             </div>
             <button type="submit" class="btn btn-primary">Create Category</button>
         </form>
@@ -25,8 +26,12 @@
                 <tr>
                     <td>{{name}}</td>
                     <td>{{dateFormat date 'MMMM Do YYYY'}}</td>
-                    <td>dadas</td>
-                    <td>dadsad</td>
+                    <td><a class="btn btn-info" href='/admin/categories/edit/{{_id}}'<d><i class="fa fa-pencil"></i></d></a></td>
+                    <td>
+                        <form action="/admin/categories/{{_id}}?_method=DELETE" method="POST">
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
