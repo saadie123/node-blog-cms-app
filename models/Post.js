@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     title:{
         type: String,
-        minlength: 5,
         required: true
     },
     postImage:{
@@ -26,8 +25,13 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    category:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'categories',
+        required: true
+    },
     user:{
-         type: mongoose.SchemaTypes.ObjectId,
+         type: mongoose.Schema.Types.ObjectId,
          ref: 'users',
     //     required: true,
     }

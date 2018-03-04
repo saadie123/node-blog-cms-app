@@ -13,6 +13,14 @@
                     <input name="postImage" type="file" id="postImage" class="form-control" accept="image/*">
                 </div>
                 <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                         {{#each categories}}
+                            <option value="{{_id}}">{{name}}</option>
+                         {{/each}}
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" value="{{post.status}}" class="form-control">
                     {{#select post.status}}

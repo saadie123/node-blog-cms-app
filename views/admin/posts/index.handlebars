@@ -7,6 +7,7 @@
                 <th>Title</th>
                 <th>Image</th>
                 <th>Status</th>
+                <th>Category</th>
                 <th>Description</th>
                 <th>Comments</th>
                 <th>Post Date</th>
@@ -20,6 +21,7 @@
                 <td>{{title}}</td>
                 <td><img height="50" src="/uploads/{{postImage}}"></td>
                 <td>{{status}}</td>
+                <td>{{category.name}}</td>
                 <td>{{description}}</td>
                 <td>
                     {{#if allowComments}}

@@ -3,6 +3,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const Post = require('../../models/Post');
+const Category = require('../../models/Category');
 const {isEmpty,uploadDir} = require('../../helpers/upload-helper');
 
 router.all('/*',(req,res,next)=>{
@@ -12,21 +13,27 @@ router.all('/*',(req,res,next)=>{
 
 router.get('/',async (req,res)=>{
     try{
-        let posts = await Post.find();
+        let posts = await Post.find().populate('category');
         res.render('admin/posts/index',{posts});
     } catch(error){
         console.log(error);
     }
 });
 
-router.get('/create',(req,res)=>{
-    res.render('admin/posts/create');
+router.get('/create',async (req,res)=>{
+    try {
+        let categories = await Category.find();
+        res.render('admin/posts/create',{categories});
+    } catch (error) {
+        console.log(error)
+    }
 });
 
 router.get('/edit/:id',async (req,res)=>{
     try{
         let post = await Post.findById(req.params.id);
-        res.render('admin/posts/edit',{post});        
+        let categories = await Category.find();        
+        res.render('admin/posts/edit',{post,categories});        
     } catch(error){
         console.log(error);
     }
@@ -40,6 +47,9 @@ router.post('/create',async (req,res)=>{
         }
         if(isEmpty(req.files)){
             errors.push({error:'Post image is required!'});
+        }
+        if(!req.body.category){
+            errors.push({error:'Please select post category!'});
         }
         if(!req.body.status){
             errors.push({error:'Please select post status!'});
@@ -64,7 +74,8 @@ router.post('/create',async (req,res)=>{
                 postImage: fileName,
                 status: req.body.status,
                 description: req.body.description,
-                allowComments
+                allowComments,
+                category: req.body.category 
             });
             let newPost = await post.save();
             req.flash('success_message',`Post ${newPost.title} was created successfully!`);
