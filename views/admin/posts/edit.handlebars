@@ -2,18 +2,7 @@
     <div class="row">
         <div class="col-md-8 col-xs-12">
             <h1>Edit Post</h1>
-            {{#if errors}}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <ul style='margin:0'>
-                        {{#each errors}}
-                            <li>{{error}}</li>
-                        {{/each}}
-                    </ul>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {{/if}}
+            {{> admin/error-message}}
             <form action="/admin/posts/edit/{{post._id}}?_method=PUT" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -42,7 +31,7 @@
                     <label class="form-check-label" for="allowComments">Allow Comments</label>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Update Post</button>
             </form>
         </div>
     </div>
