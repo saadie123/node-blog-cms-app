@@ -42,6 +42,11 @@ router.get('/post/:id',async (req,res)=>{
     res.render('home/post',{post,categories});
 });
 
+router.get('/logout',(req,res)=>{
+    req.logout();
+    res.redirect('/login');
+})
+
 router.post('/register',async (req,res)=>{
     let errors = [];
     let oldUser = await User.findOne({email:req.body.email});
