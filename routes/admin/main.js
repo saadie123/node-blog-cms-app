@@ -1,9 +1,9 @@
 const express = require('express');
+const {isAuthenticated} = require('../../helpers/auth.js');
 
 const router = express.Router();
-router.all('/*',(req,res,next)=>{
-    req.app.locals.layout = "admin";
-    next();
+router.all('/*',isAuthenticated,(req,res,next)=>{
+        req.app.locals.layout = "admin";
 });
 
 // Admin dashboard route
