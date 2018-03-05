@@ -8,9 +8,12 @@ const methodOverride = require('method-override');
 const expressFileUpload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+
+const {mongoDbUrl} = require('./config/database');
 
 const app = express();
-mongoose.connect('mongodb://localhost/blog-cms');
+mongoose.connect(mongoDbUrl);
 mongoose.Promise = global.Promise;
 
 const {select,dateFormat} = require('./helpers/hbs-helpers');
@@ -32,9 +35,14 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
+// Locals Middleware
 app.use((req,res,next)=>{
+    res.locals.user = req.user || null;
     res.locals.successMessage = req.flash('success_message');
+    res.locals.error = req.flash('error');
     next();
 });
 

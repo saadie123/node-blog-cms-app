@@ -1,6 +1,8 @@
 const express = require('express');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const router = express.Router();
 
 const User = require('../../models/User');
@@ -83,6 +85,37 @@ router.post('/register',async (req,res)=>{
             console.log(error);
         }
     }
+});
+
+passport.use(new LocalStrategy({usernameField:'email'},async (email, password, done)=>{
+    let user = await User.findOne({email});
+    if(!user) return done(null,false,{message:'No user found'});
+    bcrypt.compare(password,user.password,(error,matched)=>{
+        if(error) return error;
+        if(matched){
+            return done(null,user);
+        } else {
+            return done(null,false,{message:'Incorrect password!'});
+        }
+    });
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+  
+  passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+      done(err, user);
+    });
+  });
+
+router.post('/login',(req,res,next)=>{
+    passport.authenticate('local',{
+        successRedirect: '/admin',
+        failureRedirect:'/login',
+        failureFlash:true
+    })(req,res,next);
 });
 
 module.exports = router;
