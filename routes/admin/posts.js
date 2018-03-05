@@ -75,7 +75,8 @@ router.post('/create',async (req,res)=>{
                 status: req.body.status,
                 description: req.body.description,
                 allowComments,
-                category: req.body.category 
+                category: req.body.category,
+                user: req.user.id
             });
             let newPost = await post.save();
             req.flash('success_message',`Post ${newPost.title} was created successfully!`);

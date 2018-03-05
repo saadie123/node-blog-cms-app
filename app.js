@@ -23,6 +23,7 @@ const homeRouter = require('./routes/home/main');
 const adminRouter = require('./routes/admin/main');
 const postsRouter = require('./routes/admin/posts');
 const categoriesRouter = require('./routes/admin/categories');
+const commentsRouter = require('./routes/admin/comments');
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(expressFileUpload());
@@ -55,6 +56,7 @@ app.use('/',homeRouter);
 app.use('/admin',adminRouter);
 app.use('/admin/posts',postsRouter);
 app.use('/admin/categories',categoriesRouter);
+app.use('/admin/comments',commentsRouter);
 
 // Server port setup
 const port = process.env.PORT || 5000;

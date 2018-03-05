@@ -1,9 +1,13 @@
 const express = require('express');
-const {isAuthenticated} = require('../../helpers/auth.js');
 
 const router = express.Router();
-router.all('/*',isAuthenticated,(req,res,next)=>{
+router.all('/*',(req,res,next)=>{
+    if(req.isAuthenticated()){
         req.app.locals.layout = "admin";
+        next();
+    } else {
+        res.render('home/login',{error:'Please login first!'});
+    }
 });
 
 // Admin dashboard route

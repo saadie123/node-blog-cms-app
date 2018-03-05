@@ -15,9 +15,13 @@ router.all('/*',(req,res,next)=>{
 });
 // Home page route
 router.get('/',async (req,res)=>{
-    let posts = await Post.find();
-    let categories = await Category.find();
-    res.render('home/index',{posts,categories});
+    try {
+        let posts = await Post.find();
+        let categories = await Category.find();
+        res.render('home/index',{posts,categories});
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 // About page route
