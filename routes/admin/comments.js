@@ -4,6 +4,18 @@ const router = express.Router();
 const Post = require('../../models/Post');
 const Comment = require('../../models/Comment');
 
+router.all('/*',(req,res,next)=>{
+    req.app.locals.layout = "admin";
+    next();
+});
+
+
+router.get('/',async (req,res)=>{
+    let comments = await Comment.find().populate('user');
+    res.render('admin/comments/index',{comments});
+});
+
+
 router.post('/:postId',async (req, res, next) => {
    try {
         let post = await Post.findById(req.params.postId);
