@@ -7,7 +7,6 @@
                 <th>Text</th>
                 <th>Author</th>
                 <th>Date</th>
-                <th>Edit</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -17,9 +16,8 @@
                 <td>{{text}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{dateFormat date 'MMMM Do YYYY'}}</td>
-                <td><a class="btn btn-info" href='/admin/posts/edit/{{_id}}'<d><i class="fa fa-pencil"></i></d></a></td>
                 <td>
-                    <form action="/admin/posts/{{_id}}?_method=DELETE" method="POST">
+                    <form action="/admin/comments/{{id}}?_method=DELETE" method="POST">
                         <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                     </form>
                 </td>

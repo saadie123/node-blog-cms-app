@@ -35,5 +35,16 @@ router.post('/:postId',async (req, res, next) => {
    }
 });
 
+router.delete('/:id',async (req,res)=>{
+    try {
+        let comment = await Comment.findByIdAndRemove(req.params.id);
+        if(comment){
+            res.redirect('/admin/comments');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 module.exports = router;
