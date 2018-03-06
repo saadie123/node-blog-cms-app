@@ -14,7 +14,7 @@ router.all('/*',(req,res,next)=>{
 
 router.get('/',async (req,res)=>{
     try{
-        let posts = await Post.find().populate('category');
+        let posts = await Post.find({user: req.user.id}).populate('category');
         res.render('admin/posts/index',{posts});
     } catch(error){
         console.log(error);

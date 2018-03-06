@@ -11,7 +11,7 @@ router.all('/*',(req,res,next)=>{
 
 
 router.get('/',async (req,res)=>{
-    let comments = await Comment.find().populate('user');
+    let comments = await Comment.find({user: req.user.id}).populate('user');
     res.render('admin/comments/index',{comments});
 });
 
@@ -39,6 +39,7 @@ router.delete('/:id',async (req,res)=>{
     try {
         let comment = await Comment.findByIdAndRemove(req.params.id);
         if(comment){
+           let post = await Post.findOneAndUpdate({comments:req.params.id},{$pull:{comments:req.params.id}});
             res.redirect('/admin/comments');
         }
     } catch (error) {
