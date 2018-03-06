@@ -8,6 +8,7 @@ const router = express.Router();
 const User = require('../../models/User');
 const Post = require('../../models/Post');
 const Category = require('../../models/Category');
+const Comment = require('../../models/Comment');
 
 router.all('/*',(req,res,next)=>{
     req.app.locals.layout = "home";
@@ -41,8 +42,9 @@ router.get('/login',(req,res)=>{
 
 // Single post page route
 router.get('/post/:id',async (req,res)=>{
-    let post = await Post.findById(req.params.id);
-    let categories = await Category.find();    
+    let post = await Post.findById(req.params.id).populate({path:'comments',populate:{path:'user',model:'users'}}).populate('user');
+    console.log(post);
+    let categories = await Category.find();
     res.render('home/post',{post,categories});
 });
 
