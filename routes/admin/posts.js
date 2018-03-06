@@ -4,6 +4,7 @@ const router = express.Router();
 
 const Post = require('../../models/Post');
 const Category = require('../../models/Category');
+const Comment = require('../../models/Comment');
 const {isEmpty,uploadDir} = require('../../helpers/upload-helper');
 
 router.all('/*',(req,res,next)=>{
@@ -131,11 +132,14 @@ router.put('/edit/:id',async (req,res)=>{
 
 router.delete('/:id',async (req,res)=>{    
     try {
-        let post = await Post.findByIdAndRemove(req.params.id);
+        let post = await Post.findByIdAndRemove(req.params.id).populate('comments');
+        post.comments.forEach(async comment => {
+            await Comment.findByIdAndRemove(comment._id);
+        });
         fs.unlink(uploadDir + post.postImage,(error)=>{
             console.log(error);
         });
-        req.flash('success_message',`Post ${post.title} was deleted successfully!`);        
+        req.flash('success_message',`Post ${post.title} and its comments were deleted successfully!`);        
         res.redirect('/admin/posts');
     } catch (error) {
         console.log(error);
