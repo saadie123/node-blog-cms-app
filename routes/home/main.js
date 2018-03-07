@@ -42,7 +42,7 @@ router.get('/login',(req,res)=>{
 
 // Single post page route
 router.get('/post/:id',async (req,res)=>{
-    let post = await Post.findById(req.params.id).populate({path:'comments',populate:{path:'user',model:'users'}}).populate('user');
+    let post = await Post.findById(req.params.id).populate({path:'comments',match:{approveComment:true},populate:{path:'user',model:'users'}}).populate('user');
     console.log(post);
     let categories = await Category.find();
     res.render('home/post',{post,categories});

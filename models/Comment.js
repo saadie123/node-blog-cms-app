@@ -9,6 +9,10 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    approveComment:{
+        type: Boolean,
+        default: false
+    },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'users'

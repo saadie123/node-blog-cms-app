@@ -11,9 +11,23 @@ router.all('/*',(req,res,next)=>{
 
 
 router.get('/',async (req,res)=>{
-    let comments = await Comment.find({user: req.user.id}).populate('user');
-    res.render('admin/comments/index',{comments});
+    try {
+        let comments = await Comment.find({user: req.user.id}).populate('user');
+        res.render('admin/comments/index',{comments});
+    } catch (error) {
+        console.log(error)
+    }
 });
+
+router.post('/approve-comment',async (req,res)=>{
+    try {
+        const id = req.body.id;
+        let comment = await Comment.findByIdAndUpdate(req.body.id,{$set:{approveComment:req.body.approveComment}});
+        res.send({comment});
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 
 router.post('/:postId',async (req, res, next) => {
@@ -27,7 +41,7 @@ router.post('/:postId',async (req, res, next) => {
             post.comments.push(comment);
             let updatedPost = await post.save();
             let newComment = await comment.save();
-            console.log(updatedPost);
+            req.flash('success_message',`Your comment will be reviewed`);            
             res.redirect(`/post/${updatedPost.id}`);
         }
    } catch (error) {
@@ -45,7 +59,8 @@ router.delete('/:id',async (req,res)=>{
     } catch (error) {
         console.log(error);
     }
-})
+});
+
 
 
 module.exports = router;

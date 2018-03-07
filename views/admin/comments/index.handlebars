@@ -6,6 +6,7 @@
             <tr>
                 <th>Text</th>
                 <th>Author</th>
+                <th>Approve</th>
                 <th>Date</th>
                 <th>Delete</th>
             </tr>
@@ -15,6 +16,7 @@
             <tr>
                 <td>{{text}}</td>
                 <td>{{user.firstName}}</td>
+                <td><input data-id="{{id}}" {{#if approveComment}} checked="checked" {{/if}}type="checkbox" name="approveComment"></td>
                 <td>{{dateFormat date 'MMMM Do YYYY'}}</td>
                 <td>
                     <form action="/admin/comments/{{id}}?_method=DELETE" method="POST">
