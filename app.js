@@ -16,7 +16,8 @@ const app = express();
 mongoose.connect(mongoDbUrl);
 mongoose.Promise = global.Promise;
 
-const {select,dateFormat} = require('./helpers/hbs-helpers');
+// hbs Helper functions import
+const {select,dateFormat,paginate} = require('./helpers/hbs-helpers');
 
 // Router imports
 const homeRouter = require('./routes/home/main');
@@ -48,7 +49,7 @@ app.use((req,res,next)=>{
 });
 
 // View Engine Setup
-app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select,dateFormat}}));
+app.engine('handlebars',expresshbs({defaultLayout:'home',helpers: {select,dateFormat,paginate}}));
 app.set('view engine','handlebars');
 
 // Route Middlewares

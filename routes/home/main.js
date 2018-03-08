@@ -17,9 +17,17 @@ router.all('/*',(req,res,next)=>{
 // Home page route
 router.get('/',async (req,res)=>{
     try {
-        let posts = await Post.find();
+        const perPage = 10;
+        const page = req.query.page || 1;
+        let posts = await Post.find().skip((perPage * page) - perPage).limit(perPage);
+        let postCount = await Post.count();
         let categories = await Category.find();
-        res.render('home/index',{posts,categories});
+        res.render('home/index',{
+            posts,
+            categories,
+            current:parseInt(page),
+            pages: Math.ceil(postCount / perPage)
+        });
     } catch (error) {
         console.log(error);
     }
@@ -43,7 +51,6 @@ router.get('/login',(req,res)=>{
 // Single post page route
 router.get('/post/:id',async (req,res)=>{
     let post = await Post.findById(req.params.id).populate({path:'comments',match:{approveComment:true},populate:{path:'user',model:'users'}}).populate('user');
-    console.log(post);
     let categories = await Category.find();
     res.render('home/post',{post,categories});
 });

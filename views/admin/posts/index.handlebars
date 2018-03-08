@@ -10,6 +10,7 @@
                 <th>Category</th>
                 <th>Comments</th>
                 <th>Post Date</th>
+                <th>View</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -29,6 +30,7 @@
                     {{/if}}
                 </td>
                 <td>{{dateFormat date 'MMMM Do YYYY'}}</td>
+                <td><a href="/post/{{id}}">View</a></td>
                 <td><a class="btn btn-info" href='/admin/posts/edit/{{_id}}'<d><i class="fa fa-pencil"></i></d></a></td>
                 <td>
                     <form action="/admin/posts/{{_id}}?_method=DELETE" method="POST">
